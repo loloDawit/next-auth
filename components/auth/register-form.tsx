@@ -26,7 +26,7 @@ export const RegisterForm = () => {
   const [error, setError] = useState<string | undefined>('');
   const form = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
-    defaultValues: { email: '', password: '', name: ''},
+    defaultValues: { email: '', password: '', name: '' },
   });
 
   const onSubmit = (data: z.infer<typeof RegisterSchema>) => {
@@ -50,7 +50,7 @@ export const RegisterForm = () => {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <div className="space-y-4">
-          <FormField
+            <FormField
               control={form.control}
               name="name"
               render={({ field }) => (
