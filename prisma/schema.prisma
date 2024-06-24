@@ -8,6 +8,11 @@ generator client {
   provider = "prisma-client-js"
 }
 
+enum Role {
+  USER
+  ADMIN
+}
+
 // prisma/schema.prisma
 datasource db {
   provider  = "postgresql"
@@ -24,6 +29,7 @@ model User {
   image         String?
   password      String?
   accounts      Account[]
+  role          Role            @default(USER)
  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
