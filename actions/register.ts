@@ -2,7 +2,7 @@
 
 import { RegisterSchema } from '@/schemas';
 import * as z from 'zod';
-import {db} from '@/lib/db';
+import { db } from '@/lib/db';
 import { hash } from 'bcrypt';
 import { getUserByEmail } from '@/data/user';
 
