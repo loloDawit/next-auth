@@ -23,7 +23,10 @@ import { useSearchParams } from 'next/navigation';
 
 export const LoginForm = () => {
   const searchParams = useSearchParams();
-  const errorUrl = searchParams.get('error') === 'OAuthAccountNotLinked' ? 'An account exists with the same e-mail' : '';
+  const errorUrl =
+    searchParams.get('error') === 'OAuthAccountNotLinked'
+      ? 'An account exists with the same e-mail'
+      : '';
   const [isPending, startTransition] = useTransition();
   const [success, setSuccess] = useState<string | undefined>('');
   const [error, setError] = useState<string | undefined>('');
