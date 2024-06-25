@@ -13,14 +13,14 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16, 18, 21]
+        node-version: [16, 18, 20, 21]
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3  # Updated to v3
 
       - name: Cache Node.js modules
-        uses: actions/cache@v2
+        uses: actions/cache@v3  # Updated to v3
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ matrix.node-version }}-${{ hashFiles('package-lock.json') }}
@@ -28,7 +28,7 @@ jobs:
             ${{ runner.os }}-node-${{ matrix.node-version }}-
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4  # Updated to v4
         with:
           node-version: ${{ matrix.node-version }}
 
@@ -38,9 +38,12 @@ jobs:
       - name: Run tests
         run: npm test
 
+      - name: Create test-results directory
+        run: mkdir -p test-results  # Ensure the directory exists
+
       - name: Upload test results
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3  # Updated to v3
         with:
           name: test-results
           path: test-results/
