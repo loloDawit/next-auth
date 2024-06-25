@@ -42,6 +42,13 @@ const config: Config = {
   //   "lcov",
   //   "clover"
   // ],
+  reporters: [
+    "default",
+    ["jest-junit", {
+      outputDirectory: "test-results",
+      outputName: "results.xml",
+    }],
+  ],
 
   // An object that configures minimum threshold enforcement for coverage results
   // coverageThreshold: undefined,

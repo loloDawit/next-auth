@@ -36,10 +36,12 @@ jobs:
         run: npm ci
 
       - name: Run tests
-        run: npm test
+        run: |
+          mkdir -p test-results  # Ensure the directory exists
+          npx jest --ci
 
-      - name: Create test-results directory
-        run: mkdir -p test-results  # Ensure the directory exists
+      - name: List test results
+        run: ls -la test-results  # List the contents of the directory
 
       - name: Upload test results
         if: always()
