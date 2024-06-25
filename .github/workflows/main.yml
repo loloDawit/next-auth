@@ -1,28 +1,49 @@
 name: Run tests
 on:
-    push:
-        branches:
-        - main
-    pull_request:
-        branches:
-        - main
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-    test:
-        runs-on: ubuntu-latest
-        steps:
-        - name: Checkout repository
-          uses: actions/checkout@v2
+  test:
+    runs-on: ubuntu-latest
 
-        - name: Install dependencies
-          uses: actions/setup-node@v3
-          with:
-            node-version: '21'
+    strategy:
+      matrix:
+        node-version: [14, 16, 18]
 
-        - name: Install dependencies
-          run: npm install
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-        - name: Run tests
-          run: npm test
+      - name: Cache Node.js modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ matrix.node-version }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-${{ matrix.node-version }}-
 
-          
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm test
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-results
+          path: test-results/
+
+      - name: Clean up
+        run: rm -rf node_modules
