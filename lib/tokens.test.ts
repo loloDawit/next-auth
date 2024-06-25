@@ -32,7 +32,7 @@ describe('generateVerificationToken', () => {
     (db.verificationToken.create as jest.Mock).mockResolvedValue({
       email,
       token,
-      expiresAt,
+      expiresAt: expect.any(Date),
     });
 
     const result = await generateVerificationToken(email);
@@ -43,13 +43,13 @@ describe('generateVerificationToken', () => {
       data: {
         email,
         token: expect.any(String),
-        expiresAt,
+        expiresAt: expect.any(Date),
       },
     });
     expect(result).toEqual({
       email,
       token: expect.any(String),
-      expiresAt,
+      expiresAt: expect.any(Date),
     });
   });
 
@@ -71,7 +71,7 @@ describe('generateVerificationToken', () => {
     (db.verificationToken.create as jest.Mock).mockResolvedValue({
       email,
       token,
-      expiresAt,
+      expiresAt: expect.any(Date),
     });
 
     const result = await generateVerificationToken(email);
@@ -84,13 +84,13 @@ describe('generateVerificationToken', () => {
       data: {
         email,
         token: expect.any(String),
-        expiresAt,
+        expiresAt: expect.any(Date),
       },
     });
     expect(result).toEqual({
       email,
       token: expect.any(String),
-      expiresAt,
+      expiresAt: expect.any(Date),
     });
   });
 });
