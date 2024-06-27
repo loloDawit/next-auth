@@ -43,11 +43,14 @@ const config: Config = {
   //   "clover"
   // ],
   reporters: [
-    "default",
-    ["jest-junit", {
-      outputDirectory: "test-results",
-      outputName: "results.xml",
-    }],
+    'default',
+    [
+      'jest-junit',
+      {
+        outputDirectory: 'test-results',
+        outputName: 'results.xml',
+      },
+    ],
   ],
 
   // An object that configures minimum threshold enforcement for coverage results
