@@ -6,6 +6,9 @@ import { db } from '@/lib/db';
 import { signIn } from '@/auth';
 import { DEFAULT_LOGIN_REDIRECT } from '@/routes';
 import { AuthError } from 'next-auth';
+import { getUserByEmail } from '@/data/user';
+import { generateVerificationToken } from '@/lib/tokens';
+import sendEmailVerification from '@/lib/send-email';
 
 export const login = async (data: z.infer<typeof LoginSchema>) => {
   const validatedData = LoginSchema.safeParse(data);
@@ -17,6 +20,17 @@ export const login = async (data: z.infer<typeof LoginSchema>) => {
   }
 
   const { email, password } = validatedData.data;
+  const user = await getUserByEmail(email);
+  if (!user || !user.email || !user.password) {
+    return { error: 'Invalid credentials!' };
+  }
+
+  if (!user.emailVerified) {
+    const verificationToken = await generateVerificationToken(email);
+    sendEmailVerification(verificationToken.email, verificationToken.token);
+    return { success: 'New confirmation email sent' };
+  }
+
   try {
     await signIn('credentials', {
       email,
@@ -25,8 +39,6 @@ export const login = async (data: z.infer<typeof LoginSchema>) => {
       redirectTo: DEFAULT_LOGIN_REDIRECT,
     });
   } catch (error) {
-    console.log(error.type);
-
     if (error instanceof AuthError) {
       switch (error.type) {
         // case 'OAuthSignin':

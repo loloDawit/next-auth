@@ -17,10 +17,10 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3  # Updated to v3
+        uses: actions/checkout@v3 # Updated to v3
 
       - name: Cache Node.js modules
-        uses: actions/cache@v3  # Updated to v3
+        uses: actions/cache@v3 # Updated to v3
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ matrix.node-version }}-${{ hashFiles('package-lock.json') }}
@@ -28,7 +28,7 @@ jobs:
             ${{ runner.os }}-node-${{ matrix.node-version }}-
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4  # Updated to v4
+        uses: actions/setup-node@v4 # Updated to v4
         with:
           node-version: ${{ matrix.node-version }}
 
@@ -41,11 +41,11 @@ jobs:
           npx jest --ci
 
       - name: List test results
-        run: ls -la test-results  # List the contents of the directory
+        run: ls -la test-results # List the contents of the directory
 
       - name: Upload test results
         if: always()
-        uses: actions/upload-artifact@v3  # Updated to v3
+        uses: actions/upload-artifact@v3 # Updated to v3
         with:
           name: test-results
           path: test-results/

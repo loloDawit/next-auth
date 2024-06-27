@@ -88,14 +88,21 @@ export default {
     },
   },
   callbacks: {
-    // async signIn({ user, account, profile, email, credentials }) {
-    //   console.log("Sign in callback:", user, account, profile, email, credentials);
-    //   const existingUser = await getUserById(user?.id);
-    //   if (!existingUser || !existingUser?.emailVerified) {
-    //     return false
-    //   }
-    //   return true;
-    // },
+    async signIn({ user, account, profile, email, credentials }) {
+      console.log('Sign in callback:', user, account, profile, email, credentials);
+      // allow OAuth without email verifications
+      if (account?.provider !== 'credentials') {
+        return true;
+      }
+
+      // prevent sign in if email is not verified
+      const existingUser = await getUserById(user?.id ?? '');
+      if (!existingUser || !existingUser?.emailVerified) {
+        return false;
+      }
+
+      return true;
+    },
     async session({ session, token, user }) {
       console.log('Session callback:', { session, token, user });
       if (token.sub && session.user) {

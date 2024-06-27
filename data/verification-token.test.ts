@@ -1,5 +1,7 @@
-
-import { getVerificationTokenByEmail, getVerificationTokenByToken } from '@/data/verification-token';
+import {
+  getVerificationTokenByEmail,
+  getVerificationTokenByToken,
+} from '@/data/verification-token';
 import { db } from '@/lib/db';
 
 jest.mock('@/lib/db', () => ({
