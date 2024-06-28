@@ -22,7 +22,7 @@ const NewVerificationForm = () => {
       return;
     }
     didRun.current = true;
-    
+
     if (!token) {
       setError('No verification token found. Please try again.');
       setLoading(false);
