@@ -9,7 +9,13 @@ export const publicRoutes: string[] = ['/', '/auth/new-verification'];
  * These routes will redirect to the login page if the user is not authenticated
  * @type {string[]}
  */
-export const authRoutes: string[] = ['/auth/login', '/auth/register', '/auth/error'];
+export const authRoutes: string[] = [
+  '/auth/login',
+  '/auth/register',
+  '/auth/error',
+  '/auth/reset',
+  '/auth/reset-password',
+];
 
 /**
  * The prefix for the auth API
