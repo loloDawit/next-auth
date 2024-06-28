@@ -37,17 +37,19 @@ async function sendEmail({ from, to, subject, html }: SendEmailParams): Promise<
 /**
  * Sends an email verification email.
  * @param {string} email - The recipient's email address.
- * @param {string} verificationToken - The confirmation link.
+ * @param {string} token - The confirmation link.
  * @returns {Promise<SendEmailResponse>} - The response from the Resend service.
  */
 async function sendEmailVerification(
   email: string,
-  verificationToken: string,
+  token: string,
+  route: string,
+  reset: boolean = false,
 ): Promise<SendEmailResponse> {
-  const confirmLink = `http://localhost:3000/auth/new-verification?token=${verificationToken}`;
+  const confirmLink = `http://localhost:3000/auth/${route}?token=${token}`;
   const from = 'onboarding@resend.dev';
-  const subject = 'Welcome to oneTodo! Confirm your email';
-  const html = `Click <a href="${confirmLink}">here</a> to <p>Confirm your email</p>`;
+  const subject = `Welcome to oneTodo! ${reset ? 'reset your password' : 'Confirm your email'}`;
+  const html = `Click <a href="${confirmLink}">here</a> to <p>${reset ? 'Reset your password' : 'Confirm your email'}</p>`;
 
   return sendEmail({ from, to: email, subject, html });
 }
