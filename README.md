@@ -1,4 +1,49 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Next.js 14 Authentication and Role-Based Access Control Project
+
+This project is built using the latest features of Next.js 14, incorporating Tailwind CSS, ShadcnUI, NextAuth v5, Prisma, Resend, and Neon. It provides a robust authentication system and role-based access control to manage different levels of user access.
+
+## Key Features
+
+### Authentication
+- 🔐 **Next-auth v5 (Auth.js):** Integrated for authentication.
+- 🔑 **Credentials Provider:** For custom login systems.
+- 🌐 **OAuth Provider:** Social login with Google & GitHub.
+- 🔒 **Forgot password functionality:** Allows users to recover their accounts.
+- ✉️ **Email verification:** Ensures user email authenticity.
+- 📱 **Two-factor verification (2FA):** Adds an extra layer of security.
+
+### User Management
+- 👥 **User roles (Admin & User):** Different access levels for different users.
+- 🔓 **Login component:** Can be opened in a redirect or modal.
+- 📝 **Register component:** For new users to create an account.
+- 🤔 **Forgot password component:** For account recovery.
+- ✅ **Verification component:** For email and 2FA verification.
+- ⚠️ **Error component:** To display authentication and other errors.
+- 🔘 **Login button:** For initiating the login process.
+- 🚪 **Logout button:** For users to sign out.
+- 🔍 **Exploring Next.js middleware:** For advanced routing and server-side logic.
+
+### Role-Based Access
+- 🚧 **Role Gate:** To restrict content based on user roles.
+- 🛡️ **Protect API Routes for admins only:** Ensures only admins can access certain APIs.
+- 🔐 **Protect Server Actions for admins only:** Restricts server actions to admins.
+- 👑 **Render content for admins using RoleGate component:** For admin-specific content.
+
+### Utilities and Hooks
+- 👤 **useCurrentUser hook:** To fetch the current user's data.
+- 🛂 **useRole hook:** To determine the user's role.
+- 🧑 **currentUser utility:** For accessing current user information.
+- 👮 **currentRole utility:** For accessing the current user's role.
+
+### Examples
+- 🖥️ **Example with server component:** Demonstrates server-side components.
+- 💻 **Example with client component:** Demonstrates client-side components.
+
+### Settings
+- 📧 **Change email with new verification in Settings page:** Allows users to update their email.
+- 🔑 **Change password with old password confirmation in Settings page:** For secure password updates.
+- 🔔 **Enable/disable two-factor auth in Settings page:** User control over 2FA.
+- 🔄 **Change user role in Settings page (for development purposes only):** Allows role changes.
 
 ## Getting Started
 
