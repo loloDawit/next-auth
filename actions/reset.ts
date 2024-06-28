@@ -1,7 +1,7 @@
 'use server';
 
 import { getUserByEmail } from '@/data/user';
-import sendEmailVerification from '@/lib/send-email';
+import sendEmailVerification from '@/lib/send-email/email-verification';
 import { generatePasswordResetToken } from '@/lib/tokens';
 import { ResetPasswordSchema } from '@/schemas';
 import * as z from 'zod';
