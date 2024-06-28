@@ -73,7 +73,7 @@ export const generateTwoFactorToken = async (email: string) => {
       where: { id: hasExistingToken.id },
     });
   }
-  
+
   return await db.twoFactorToken.create({
     data: {
       email,
@@ -81,4 +81,4 @@ export const generateTwoFactorToken = async (email: string) => {
       expiresAt,
     },
   });
-}
+};

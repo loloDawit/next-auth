@@ -1,4 +1,8 @@
-import { generatePasswordResetToken, generateTwoFactorToken, generateVerificationToken } from '@/lib/tokens';
+import {
+  generatePasswordResetToken,
+  generateTwoFactorToken,
+  generateVerificationToken,
+} from '@/lib/tokens';
 import { getVerificationTokenByEmail } from '@/data/verification-token';
 import { getPasswordResetTokenByEmail } from '@/data/password-reset-token';
 import { getTwoFactorTokenByEmail } from '@/data/two-factor-token';
