@@ -12,6 +12,12 @@ export const LoginSchema = z.object({
   }),
 });
 
+export const TwoFactorSchema = z.object({
+  code: z.string().min(6, {
+    message: 'Your one-time password must be 6 characters.',
+  }),
+});
+
 export const ResetPasswordSchema = z.object({
   email: z.string().email({
     message: 'Please enter a valid email address',
