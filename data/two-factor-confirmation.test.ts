@@ -15,41 +15,41 @@ describe('Two Factor Confirmation Retrieval', () => {
   });
 
   it('should return the two factor confirmation if found by id', async () => {
-    const id = 'confirmation-id';
+    const userId = 'user-id';
     const confirmationData = {
-      id,
+      userId,
       // Add other properties here
     };
     (db.twoFactorConfirmation.findUnique as jest.Mock).mockResolvedValue(confirmationData);
 
-    const result = await getTwoFactorConfirmationById(id);
+    const result = await getTwoFactorConfirmationById(userId);
 
     expect(db.twoFactorConfirmation.findUnique).toHaveBeenCalledWith({
-      where: { id },
+      where: { userId },
     });
     expect(result).toEqual(confirmationData);
   });
 
   it('should return null if no two factor confirmation is found by id', async () => {
-    const id = 'confirmation-id';
+    const userId = 'user-id';
     (db.twoFactorConfirmation.findUnique as jest.Mock).mockResolvedValue(null);
 
-    const result = await getTwoFactorConfirmationById(id);
+    const result = await getTwoFactorConfirmationById(userId);
 
     expect(db.twoFactorConfirmation.findUnique).toHaveBeenCalledWith({
-      where: { id },
+      where: { userId },
     });
     expect(result).toBeNull();
   });
 
   it('should return null if an error occurs', async () => {
-    const id = 'confirmation-id';
+    const userId = 'user-id';
     (db.twoFactorConfirmation.findUnique as jest.Mock).mockRejectedValue(new Error('DB error'));
 
-    const result = await getTwoFactorConfirmationById(id);
+    const result = await getTwoFactorConfirmationById(userId);
 
     expect(db.twoFactorConfirmation.findUnique).toHaveBeenCalledWith({
-      where: { id },
+      where: { userId },
     });
     expect(result).toBeNull();
   });

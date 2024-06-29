@@ -49,7 +49,7 @@ jobs:
         with:
           name: test-results
           path: test-results/
-      
+
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4.0.1 # Add Codecov action
         with:

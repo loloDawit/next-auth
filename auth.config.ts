@@ -9,6 +9,7 @@ import { getUserById } from '@/data/user';
 import { LoginSchema } from '@/schemas';
 import { getUserByEmail } from './data/user';
 import { db } from './lib/db';
+import { getTwoFactorConfirmationById } from './data/two-factor-confirmation';
 
 export default {
   providers: [
@@ -99,6 +100,18 @@ export default {
       const existingUser = await getUserById(user?.id ?? '');
       if (!existingUser || !existingUser?.emailVerified) {
         return false;
+      }
+
+      // add two factor authentication check
+      if (existingUser?.isTwoFactorEnabled) {
+        const twoFactorConfirmation = await getTwoFactorConfirmationById(existingUser.id);
+        if (!twoFactorConfirmation) {
+          return false;
+        }
+
+        await db.twoFactorConfirmation.delete({
+          where: { id: twoFactorConfirmation.id },
+        });
       }
 
       return true;
