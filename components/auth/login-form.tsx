@@ -2,26 +2,12 @@
 
 import { useState, useTransition } from 'react';
 import * as z from 'zod';
-import { CardWrapper } from './card-wrapper';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { LoginSchema } from '@/schemas';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { FormError } from '@/components/form-error';
-import { FormSuccess } from '@/components/form-success';
-import { login } from '@/actions/login';
 import { useSearchParams } from 'next/navigation';
-import Link from 'next/link';
-import LoadingButton from '../loading-button';
+import { CardWrapper } from './card-wrapper';
+import { InitialLoginForm } from './initial-login-form';
+import { TwoFactorForm } from './2FA-form';
+import { login, verifyOtp } from '@/actions/login';
+import { LoginSchema, TwoFactorSchema } from '@/schemas';
 
 export const LoginForm = () => {
   const searchParams = useSearchParams();
@@ -30,26 +16,90 @@ export const LoginForm = () => {
       ? 'An account exists with the same e-mail'
       : '';
   const [isPending, startTransition] = useTransition();
+  const [shouldShow2FA, setShouldShow2FA] = useState(false);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState<string | undefined>('');
   const [error, setError] = useState<string | undefined>('');
-  const form = useForm<z.infer<typeof LoginSchema>>({
-    resolver: zodResolver(LoginSchema),
-    defaultValues: { email: '', password: '' },
-  });
+  const [email, setEmail] = useState<string | undefined>('');
+  const [password, setPassword] = useState<string | undefined>('');
 
-  const onSubmit = (data: z.infer<typeof LoginSchema>) => {
+  type InitialLoginResponse =
+    | { error: string; success?: undefined; twoFactorTokenSent?: undefined }
+    | { success: string; error?: undefined; twoFactorTokenSent?: undefined }
+    | { success: string; twoFactorTokenSent: boolean; error?: undefined }
+    | undefined;
+
+  type TwoFactorResponse =
+    | { error: string; success?: undefined }
+    | { success: string; error?: undefined }
+    | undefined;
+
+  const handleInitialSubmit = (data: z.infer<typeof LoginSchema>) => {
     setError('');
     setSuccess('');
     setLoading(true);
+
+    const handleResponse = (response: InitialLoginResponse) => {
+      if (response?.error) {
+        setError(response.error);
+      } else if (response?.success) {
+        setSuccess(response.success);
+      }
+
+      if (response?.twoFactorTokenSent) {
+        setEmail(data.email);
+        setPassword(data.password);
+        setShouldShow2FA(true);
+      }
+    };
+
+    const handleError = (error: unknown) => {
+      console.error(error);
+      setError('An error occurred');
+    };
+
     startTransition(() => {
-      login(data).then((response) => {
-        if (response) {
-          setSuccess(response?.success);
-          setError(response.error);
+      login(data)
+        .then(handleResponse)
+        .catch(handleError)
+        .finally(() => {
           setLoading(false);
-        }
-      });
+        });
+    });
+  };
+
+  const handleTwoFactorSubmit = (data: z.infer<typeof TwoFactorSchema>) => {
+    setError('');
+    setSuccess('');
+    setLoading(true);
+
+    console.log(data); // Log the data to see what is being submitted
+
+    const handleResponse = (response: TwoFactorResponse) => {
+      if (response?.error) {
+        setError(response.error);
+      } else if (response?.success) {
+        setSuccess(response.success);
+      }
+    };
+
+    const handleError = (error: unknown) => {
+      console.error(error);
+      setError('An error occurred');
+    };
+
+    startTransition(() => {
+      if (email && password) {
+        verifyOtp(email, password, data)
+          .then(handleResponse)
+          .catch(handleError)
+          .finally(() => {
+            setLoading(false);
+          });
+      } else {
+        setError('Email or password is missing');
+        setLoading(false);
+      }
     });
   };
 
@@ -60,57 +110,23 @@ export const LoginForm = () => {
       backButtonLabel="Don't have an account?"
       showSocial
     >
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <div className="space-y-4">
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      disabled={isPending}
-                      placeholder="your email here"
-                      type="email"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <Input {...field} disabled={isPending} placeholder="********" type="password" />
-                  </FormControl>
-                  <Button size="sm" variant="link" asChild className="px-0 font-normal">
-                    <Link href="/auth/reset">Forgot password?</Link>
-                  </Button>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <FormError message={error || errorUrl} />
-          <FormSuccess message={success} />
-          <LoadingButton
-            type="submit"
-            size="lg"
-            className="w-full"
-            isLoading={loading}
-            loadingText="Please wait"
-            defaultText={'Login'}
-            disabled={isPending}
-          />
-        </form>
-      </Form>
+      {shouldShow2FA ? (
+        <TwoFactorForm
+          onSubmit={handleTwoFactorSubmit}
+          error={error}
+          success={success}
+          loading={loading}
+          isPending={isPending}
+        />
+      ) : (
+        <InitialLoginForm
+          onSubmit={handleInitialSubmit}
+          error={error || errorUrl}
+          success={success}
+          loading={loading}
+          isPending={isPending}
+        />
+      )}
     </CardWrapper>
   );
 };
