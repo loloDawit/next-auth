@@ -13,7 +13,6 @@ import sendEmailVerification from '@/lib/send-email/email-verification';
 export const login = async (data: z.infer<typeof LoginSchema>) => {
   const validatedData = LoginSchema.safeParse(data);
 
-  console.log('Validated data:', validatedData);
 
   if (!validatedData.success) {
     return { error: 'invalid data' };
