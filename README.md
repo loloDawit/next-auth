@@ -1,3 +1,5 @@
+[![codecov](https://codecov.io/github/loloDawit/next-auth/graph/badge.svg?token=Y7EAXRH8MY)](https://codecov.io/github/loloDawit/next-auth)
+
 # Next.js 14 Authentication and Role-Based Access Control Project
 
 This project is built using the latest features of Next.js 14, incorporating Tailwind CSS, ShadcnUI, NextAuth v5, Prisma, Resend, and Neon. It provides a robust authentication system and role-based access control to manage different levels of user access.
