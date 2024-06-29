@@ -2,15 +2,14 @@ import { Resend } from 'resend';
 import sendEmail, { resend } from './send-email';
 
 jest.mock('resend', () => {
-    return {
-      Resend: jest.fn().mockImplementation(() => ({
-        emails: {
-          send: jest.fn(),
-        },
-      })),
-    };
-  });
-  
+  return {
+    Resend: jest.fn().mockImplementation(() => ({
+      emails: {
+        send: jest.fn(),
+      },
+    })),
+  };
+});
 
 describe('sendEmail', () => {
   let mockSend: jest.Mock;
