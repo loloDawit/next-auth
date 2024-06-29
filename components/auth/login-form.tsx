@@ -21,6 +21,7 @@ import { FormSuccess } from '@/components/form-success';
 import { login } from '@/actions/login';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import LoadingButton from '../loading-button';
 
 export const LoginForm = () => {
   const searchParams = useSearchParams();
@@ -29,6 +30,7 @@ export const LoginForm = () => {
       ? 'An account exists with the same e-mail'
       : '';
   const [isPending, startTransition] = useTransition();
+  const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState<string | undefined>('');
   const [error, setError] = useState<string | undefined>('');
   const form = useForm<z.infer<typeof LoginSchema>>({
@@ -39,11 +41,13 @@ export const LoginForm = () => {
   const onSubmit = (data: z.infer<typeof LoginSchema>) => {
     setError('');
     setSuccess('');
+    setLoading(true);
     startTransition(() => {
       login(data).then((response) => {
         if (response) {
           setSuccess(response?.success);
           setError(response.error);
+          setLoading(false);
         }
       });
     });
@@ -96,9 +100,15 @@ export const LoginForm = () => {
           </div>
           <FormError message={error || errorUrl} />
           <FormSuccess message={success} />
-          <Button type="submit" size="lg" className="w-full" disabled={isPending}>
-            Login
-          </Button>
+          <LoadingButton
+            type="submit"
+            size="lg"
+            className="w-full"
+            isLoading={loading}
+            loadingText="Please wait"
+            defaultText={'Login'}
+            disabled={isPending}
+          />
         </form>
       </Form>
     </CardWrapper>

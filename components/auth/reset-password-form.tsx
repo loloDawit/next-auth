@@ -77,7 +77,7 @@ const ResetPasswordForm = () => {
 
   const onSubmit = (data: z.infer<typeof ForgotPasswordSchema>) => {
     if (shouldShowLogin) {
-      router.push('/auth/login'); 
+      router.push('/auth/login');
       return;
     }
 

@@ -19,9 +19,11 @@ import { Button } from '@/components/ui/button';
 import { FormError } from '@/components/form-error';
 import { FormSuccess } from '@/components/form-success';
 import { register } from '@/actions/register';
+import LoadingButton from '@/components/loading-button';
 
 export const RegisterForm = () => {
   const [isPending, startTransition] = useTransition();
+  const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState<string | undefined>('');
   const [error, setError] = useState<string | undefined>('');
   const form = useForm<z.infer<typeof RegisterSchema>>({
@@ -32,10 +34,12 @@ export const RegisterForm = () => {
   const onSubmit = (data: z.infer<typeof RegisterSchema>) => {
     setError('');
     setSuccess('');
+    setLoading(true);
     startTransition(() => {
       register(data).then((response) => {
         setSuccess(response.success);
         setError(response.error);
+        setLoading(false);
       });
     });
   };
@@ -102,9 +106,15 @@ export const RegisterForm = () => {
           </div>
           <FormError message={error} />
           <FormSuccess message={success} />
-          <Button type="submit" size="lg" className="w-full" disabled={isPending}>
-            Create an account
-          </Button>
+          <LoadingButton
+            type="submit"
+            size="lg"
+            className="w-full"
+            isLoading={loading}
+            loadingText="Please wait"
+            defaultText={'Create an account'}
+            disabled={isPending}
+          />
         </form>
       </Form>
     </CardWrapper>

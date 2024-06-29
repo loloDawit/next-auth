@@ -38,7 +38,7 @@ jobs:
       - name: Run tests
         run: |
           mkdir -p test-results  # Ensure the directory exists
-          npx jest --ci
+          npx jest --ci --coverage
 
       - name: List test results
         run: ls -la test-results # List the contents of the directory
@@ -49,6 +49,15 @@ jobs:
         with:
           name: test-results
           path: test-results/
+      
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4.0.1 # Add Codecov action
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage/lcov.info
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: true
 
       - name: Clean up
         run: rm -rf node_modules
